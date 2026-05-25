@@ -5,9 +5,8 @@ from database.DAO import DAO
 
 class Model:
     def __init__(self):
-        self._grafo = nx.DiGraph
-        self.artista_influente = None
-        self.influenza = 0
+        self._grafo = nx.DiGraph()
+
 
     def getGeneri (self):
         return DAO.getGeneri()
@@ -28,20 +27,26 @@ class Model:
                     if set(clientiU) & set(clientiV):
                         numTracceU = DAO.getNumeroTracce(u)
                         numTracceV = DAO.getNumeroTracce(v)
-                        if numTracceU > numTracceV:
-                            self._grafo.add_edge(u, v, weight=numTracceU+numTracceV)
-                        elif numTracceU < numTracceV:
-                            self._grafo.add_edge(v, u, weight=numTracceU+numTracceV)
-                        elif numTracceU == numTracceV:
-                            self._grafo.add_edge(u, v, weight=numTracceU+numTracceV)
-                            self._grafo.add_edge(v, u, weight=numTracceU+numTracceV)
+                        if numTracceU[0] > numTracceV[0]:
+                            self._grafo.add_edge(u, v, weight=numTracceU[0]+numTracceV[0])
+                        elif numTracceU[0] < numTracceV[0]:
+                            self._grafo.add_edge(v, u, weight=numTracceU[0]+numTracceV[0])
+                        elif numTracceU[0] == numTracceV[0]:
+                            self._grafo.add_edge(u, v, weight=numTracceU[0]+numTracceV[0])
+                            self._grafo.add_edge(v, u, weight=numTracceU[0]+numTracceV[0])
 
     def getArtistaInfluente (self):
+        artista_influente = None
+        influenza = 0
         for artista in self._grafo.nodes:
-            influenzaArtista = self._grafo.out_degree(artista) - self._grafo.in_degree(artista)
-            if influenzaArtista >self.influenza:
-                self.artista_influente = artista
-        return self.artista_influente
+            outW = self._grafo.out_degree[artista]
+            inW = self._grafo.in_degree[artista]
+
+            influenzaArtista = outW - inW
+            if influenzaArtista >influenza:
+                influenza = influenzaArtista
+                artista_influente = artista
+        return artista_influente
 
     def getPrimi5(self):
         Primi5 = sorted(

@@ -18,7 +18,7 @@ class Controller:
     def handleCreaGrafo(self, e):
         if self._view._ddGenre.value is None:
             self._view.txt_result.controls.clear()
-            self._view.txt_result.controls.append(ft.Text("Selezionare un anno dal menu", color="red"))
+            self._view.txt_result.controls.append(ft.Text("Selezionare un genere dal menu", color="red"))
         self._model.creaGrafo(self._view._ddGenre.value)
         self._view.txt_result.controls.clear()
         self._view.txt_result.controls.append(ft.Text("Grafo creato correttamente!", color="green"))
@@ -28,7 +28,7 @@ class Controller:
         primi5 = self._model.getPrimi5()
         self._view.txt_result.controls.append(ft.Text("I primi 5 archi con peso peso maggiore sono:", color="green"))
         for u, v, data in primi5:
-            self._view.txt_result.controls.append(ft.Text(f"{u}, {v}, {data["weight"]}", color="green"))
-
+            self._view.txt_result.controls.append(ft.Text(f"{u}, {v}, {data['weight']}", color="green"))
+        self._view.update_page()
     def handleCammino(self,e):
         pass

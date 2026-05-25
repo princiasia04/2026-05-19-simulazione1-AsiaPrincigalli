@@ -36,7 +36,7 @@ class DAO():
                     JOIN Artist a ON a.ArtistId = al.ArtistId
                     WHERE g.Name = %s"""
 
-        cursor.execute(query)
+        cursor.execute(query, (genere,))
 
         for row in cursor:
             result.append(row["nomiArtisti"])
@@ -60,7 +60,7 @@ class DAO():
                     join Invoice i on i.InvoiceId = il.InvoiceId 
                     WHERE a.Name  = %s"""
 
-        cursor.execute(query)
+        cursor.execute(query, (artista,))
 
         for row in cursor:
             result.append(row["cliente"])
@@ -76,13 +76,14 @@ class DAO():
         result = []
 
         cursor = conn.cursor(dictionary=True)
-        query = """SELECT DISTINCT COUNT(t.TrackId) as numeroTracce
+        query = """SELECT DISTINCT COUNT(DISTINCT t.TrackId) as numeroTracce
                     FROM Artist a 
                     JOIN Album al on al.ArtistId = a.ArtistId 
                     join Track t on t.AlbumId = al.AlbumId  
+                    join InvoiceLine il on il.TrackId = t.TrackId 
                     WHERE a.Name  = %s"""
 
-        cursor.execute(query)
+        cursor.execute(query, (artista,))
 
         for row in cursor:
             result.append(row["numeroTracce"])
