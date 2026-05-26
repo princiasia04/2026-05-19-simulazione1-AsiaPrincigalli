@@ -46,7 +46,7 @@ class DAO():
         return result
 
     @staticmethod
-    def getClienti(artista):
+    def getClienti(artista, genere):
         conn = DBConnect.get_connection()
 
         result = []
@@ -58,9 +58,11 @@ class DAO():
                     join Track t on t.AlbumId = al.AlbumId 
                     join InvoiceLine il on il.TrackId = t.TrackId 
                     join Invoice i on i.InvoiceId = il.InvoiceId 
-                    WHERE a.Name  = %s"""
+                    join Genre g on g.GenreId = t.GenreId 
+                    WHERE a.Name  = %s 
+                    and g.Name = %s"""
 
-        cursor.execute(query, (artista,))
+        cursor.execute(query, (artista, genere))
 
         for row in cursor:
             result.append(row["cliente"])
@@ -70,7 +72,7 @@ class DAO():
         return result
 
     @staticmethod
-    def getNumeroTracce(artista):
+    def getNumeroTracce(artista, genere):
         conn = DBConnect.get_connection()
 
         result = []
@@ -81,9 +83,11 @@ class DAO():
                     JOIN Album al on al.ArtistId = a.ArtistId 
                     join Track t on t.AlbumId = al.AlbumId  
                     join InvoiceLine il on il.TrackId = t.TrackId 
-                    WHERE a.Name  = %s"""
+                    join Genre g on g.GenreId = t.GenreId 
+                    WHERE a.Name  = %s
+                    and g.Name = %s"""
 
-        cursor.execute(query, (artista,))
+        cursor.execute(query, (artista, genere))
 
         for row in cursor:
             result.append(row["numeroTracce"])
